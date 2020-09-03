@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { StoredData } from './interfaces/stored-data.interface';
 import { EncryptionService } from '../encryption/encryption.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class StoringService {
-  constructor(private encryptionService: EncryptionService) {
+  constructor(private encryptionService: EncryptionService, private configService: ConfigService ) {
   }
 
   storeData(storeDataDto): string {
@@ -19,7 +20,8 @@ export class StoringService {
     console.log(getDataDto);
     const {decryption_key, id} = getDataDto;
     //TODO get data from DB
-    const decryptedData = this.encryptionService.decryptData('', decryption_key);
+    const decryptedData = this.encryptionService.decryptData("", decryption_key);
     return {id, value: decryptedData};
+
   }
 }
