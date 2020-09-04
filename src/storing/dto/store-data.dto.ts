@@ -7,7 +7,7 @@ export class StoreDataDto {
 
   @IsString()
   @IsNotEmpty()
-  readonly encryption_key: number;
+  readonly encryption_key: string;
 
   @IsNotEmpty()
   readonly value: any;

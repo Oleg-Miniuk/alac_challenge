@@ -7,5 +7,5 @@ export class GetDataDto {
 
   @IsString()
   @IsNotEmpty()
-  readonly decryption_key: number;
+  readonly decryption_key: string;
 }
