@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 // import statement fails for some reason in jest
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const CryptoJS = require("crypto-js");
+const CryptoJS = require('crypto-js');
 
 
 @Injectable()
@@ -12,7 +12,11 @@ export class EncryptionService {
   }
 
   decryptData(data: any, secretKey: string) {
-    const bytes  = CryptoJS.AES.decrypt(data, secretKey);
-    return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    try {
+      const bytes = CryptoJS.AES.decrypt(data, secretKey);
+      return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    } catch (err) {
+      throw new Error('Decryption error');
+    }
   }
 }

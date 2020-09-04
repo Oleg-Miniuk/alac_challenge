@@ -22,8 +22,8 @@ export class StoringService {
       TableName: this.config.get<string>('DDB_TABLE'),
       Item: {'id': id, 'data': encryptedData },
     };
-    const result =  await this.dynamoDbClient.put(params).promise();
-    return 'ok';
+    await this.dynamoDbClient.put(params).promise();
+    return 'Data successfully stored';
   }
 
   public async getData(data): Promise <StoredData> {

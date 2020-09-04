@@ -20,14 +20,14 @@ describe('EncryptionService', () => {
     const stringData = 'here is a string';
     const secretKey = 'secret key';
 
-    expect(service.encryptData(stringData, secretKey)).not.toBe(stringData)
+    expect(service.encryptData(stringData, secretKey)).not.toBe(stringData);
   });
 
   it('encrypts primitives: integers', () => {
     const intData = 12345;
     const secretKey = 'secret key';
 
-    expect(service.encryptData(intData, secretKey)).not.toBe(intData)
+    expect(service.encryptData(intData, secretKey)).not.toBe(intData);
   });
 
   it('encrypts and decrypts primitives: strings', () => {
@@ -37,7 +37,7 @@ describe('EncryptionService', () => {
     const encryptedString = service.encryptData(stringData, secretKey);
     const decryptedString = service.decryptData(encryptedString, secretKey);
 
-    expect(stringData).toBe(decryptedString)
+    expect(stringData).toBe(decryptedString);
   });
 
   it('encrypts and decrypts primitives: integers', () => {
@@ -47,23 +47,23 @@ describe('EncryptionService', () => {
     const encryptedInt = service.encryptData(intData, secretKey);
     const decryptedInt = service.decryptData(encryptedInt, secretKey);
 
-    expect(intData).toBe(decryptedInt)
+    expect(intData).toBe(decryptedInt);
   });
 
   it('encrypts objects', () => {
     const obj = {
       name: 'John',
-      surname: "Smith"
+      surname: 'Smith',
     };
     const secretKey = 'secret key';
 
-    expect(service.encryptData(obj, secretKey)).not.toEqual(obj)
+    expect(service.encryptData(obj, secretKey)).not.toEqual(obj);
   });
 
   it('encrypts and decrypts objects', () => {
     const obj = {
       name: 'John',
-      surname: "Smith"
+      surname: 'Smith',
     };
 
     const secretKey = 'secret key';
@@ -71,34 +71,34 @@ describe('EncryptionService', () => {
     const encryptedObj = service.encryptData(obj, secretKey);
     const decryptedObj = service.decryptData(encryptedObj, secretKey);
 
-    expect(obj).toEqual(decryptedObj)
+    expect(obj).toEqual(decryptedObj);
   });
 
   it('encrypts arrays', () => {
     const arr = [
       {
         name: 'John',
-        surname: "Smith"
+        surname: 'Smith',
       },
       {
         name: 'Lisa',
-        surname: "Smith"
+        surname: 'Smith',
       },
     ];
     const secretKey = 'secret key';
 
-    expect(service.encryptData(arr, secretKey)).not.toEqual(arr)
+    expect(service.encryptData(arr, secretKey)).not.toEqual(arr);
   });
 
   it('encrypts and decrypts objects', () => {
     const arr = [
       {
         name: 'John',
-        surname: "Smith"
+        surname: 'Smith',
       },
       {
         name: 'Lisa',
-        surname: "Smith"
+        surname: 'Smith',
       },
     ];
     const secretKey = 'secret key';
@@ -106,7 +106,21 @@ describe('EncryptionService', () => {
     const encryptedArr = service.encryptData(arr, secretKey);
     const decryptedArr = service.decryptData(encryptedArr, secretKey);
 
-    expect(arr).toEqual(decryptedArr)
+    expect(arr).toEqual(decryptedArr);
+  });
+
+  it('error handler for a wrong secret key ', () => {
+    const stringData = 'here is a string';
+    const secretKey = 'secret key';
+    const wrongSecretKey = 'wrong secret key';
+
+    const encryptedString = service.encryptData(stringData, secretKey);
+
+    try {
+      service.decryptData(encryptedString, wrongSecretKey);
+    } catch (err) {
+      expect(err.message).toBe('Decryption error');
+    }
   });
 
 });
