@@ -12,33 +12,43 @@ export class StoringService {
   constructor(private encryptionService: EncryptionService, private config: ConfigService) {
     this.dynamoDbClient = new AWS.DynamoDB.DocumentClient(
       {
-        region: this.config.get<string>('AWS_REGION')
+        region: this.config.get<string>('AWS_REGION'),
       });
   }
 
-  public async storeData(data): Promise <string> {
-    const {encryption_key, value, id} = data;
-    const encryptedData = this.encryptionService.encryptData(value, encryption_key);
+  public async storeData(data): Promise<string> {
+    const { encryption_key, value, id } = data;
+    const encryptedValue = this.encryptionService.encryptData(value, encryption_key);
     const params = {
       TableName: this.config.get<string>('DDB_TABLE'),
-      Item: {'id': id, 'data': encryptedData },
+      Item: { 'id': id, 'value': encryptedValue },
     };
     await this.dynamoDbClient.put(params).promise();
-    return 'Data successfully stored';
+      return 'Data successfully stored';
   }
 
-  public async getData(data): Promise <StoredData | []> {
-    const {decryption_key, id} = data;
+  public async getData(data): Promise<StoredData[]> {
+    const { decryption_key, id } = data;
+    // const params = {
+    //   TableName: this.config.get<string>('DDB_TABLE'),
+    //   KeyConditionExpression: 'id = :id',
+    //   ExpressionAttributeValues: { ':id': id },
+    // };
+    // const dbResponse = await this.dynamoDbClient.query(params).promise();
+    //
+
+    // TODO replace scan() as too expensive operation. Consider GSI for Dynamo instead
     const params = {
       TableName: this.config.get<string>('DDB_TABLE'),
-      KeyConditionExpression: 'id = :id',
-      ExpressionAttributeValues: { ':id': id }
+      ExpressionAttributeValues: { ':id': id },
+      FilterExpression: 'contains (id, :id)',
     };
-    const allDataQuery =  await this.dynamoDbClient.query(params).promise();
-    const dbItem = allDataQuery.Items[0];
+    const dbResponse = await this.dynamoDbClient.scan(params).promise();
     try {
-      const decryptedData = this.encryptionService.decryptData(dbItem.data, decryption_key);
-      return {id, value: decryptedData};
+      return dbResponse.Items.map(item => ({
+        id: item.id,
+        value: this.encryptionService.decryptData(item.value, decryption_key)
+      }));
     } catch (err) {
       this.logger.error(err.message);
       return [];

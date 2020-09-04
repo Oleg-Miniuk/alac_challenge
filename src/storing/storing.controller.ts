@@ -14,7 +14,7 @@ export class StoringController {
   }
 
   @Post('get-data')
-  getData(@Body() data: GetDataDto): Promise <StoredData | []> {
+  getData(@Body() data: GetDataDto): Promise <StoredData[]> {
     return this.storingService.getData(data);
   }
 }

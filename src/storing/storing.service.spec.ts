@@ -43,17 +43,18 @@ describe('StoringService', () => {
 
     const spy = jest.fn(() => ({ promise: () => Promise.resolve({
         Items: [{
-          data: encryptedString
+          id,
+          value: encryptedString
         }]
       })}));
 
     service['dynamoDbClient'] = {
-      query: spy,
+      scan: spy,
     };
 
     expect(await service.getData({
       id,
       decryption_key: secretKey,
-    })).toEqual({id, value: value});
+    })).toEqual([{id, value: value}]);
   });
 });
