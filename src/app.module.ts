@@ -3,10 +3,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { StoringModule } from './storing/storing.module';
 import { EncryptionService } from './encryption/encryption.service';
-import { ConfigModule } from '@nestjs/config';
+// import { ConfigModule } from '@nestjs/config';
+// import config from './config';
+
 
 @Module({
-  imports: [StoringModule, ConfigModule.forRoot({envFilePath: '.dev.env'})],
+  imports: [StoringModule],
   controllers: [AppController],
   providers: [AppService, EncryptionService],
 })

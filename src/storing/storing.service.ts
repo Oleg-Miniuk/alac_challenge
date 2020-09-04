@@ -1,14 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { StoredData } from './interfaces/stored-data.interface';
 import { EncryptionService } from '../encryption/encryption.service';
-import { ConfigService } from '@nestjs/config';
+import { Config } from '../config';
+import * as AWS from 'aws-sdk';
 
 @Injectable()
 export class StoringService {
-  constructor(private encryptionService: EncryptionService, private configService: ConfigService ) {
+  private dynamoDbClient;
+
+  constructor(private encryptionService: EncryptionService, @Inject('Config') private config: Config) {
+    this.dynamoDbClient = new AWS.DynamoDB.DocumentClient(
+      {
+        region: this.config.AWS_REGION
+      });
   }
 
-  storeData(storeDataDto): string {
+  public async storeData(storeDataDto): Promise <string> {
     const {encryption_key, value} = storeDataDto;
     const encryptedData = this.encryptionService.encryptData(value, encryption_key);
     //TODO save encrypted data to db
@@ -16,12 +23,18 @@ export class StoringService {
     return 'ok';
   }
 
-  getData(getDataDto): StoredData {
+  public async getData(getDataDto): Promise <StoredData> {
     console.log(getDataDto);
+    const params = {
+      TableName: this.config.DDB_TABLE,
+      KeyConditionExpression: 'id = :id',
+      Limit: 100
+    };
+    const allDataQuery =  await this.dynamoDbClient.query(params).promise();
+    const result = allDataQuery.Items;
     const {decryption_key, id} = getDataDto;
     //TODO get data from DB
     const decryptedData = this.encryptionService.decryptData("", decryption_key);
     return {id, value: decryptedData};
-
   }
 }

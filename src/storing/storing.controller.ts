@@ -9,12 +9,12 @@ export class StoringController {
   constructor(private readonly storingService: StoringService) {}
 
   @Post('store-data')
-  storeData(@Body() storeDataDto: StoreDataDto): string {
+  storeData(@Body() storeDataDto: StoreDataDto): Promise <string> {
     return this.storingService.storeData(storeDataDto);
   }
 
   @Post('get-data')
-  getData(@Body() getDataDto: GetDataDto): StoredData {
+  getData(@Body() getDataDto: GetDataDto): Promise <StoredData> {
     return this.storingService.getData(getDataDto);
   }
 }
