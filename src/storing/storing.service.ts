@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { StoredData } from './interfaces/stored-data.interface';
 import { EncryptionService } from '../encryption/encryption.service';
 import * as AWS from 'aws-sdk';
@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class StoringService {
   private dynamoDbClient;
+  private readonly logger = new Logger('StoringService');
 
   constructor(private encryptionService: EncryptionService, private config: ConfigService) {
     this.dynamoDbClient = new AWS.DynamoDB.DocumentClient(
@@ -26,9 +27,8 @@ export class StoringService {
     return 'Data successfully stored';
   }
 
-  public async getData(data): Promise <StoredData> {
+  public async getData(data): Promise <StoredData | []> {
     const {decryption_key, id} = data;
-    console.log(data);
     const params = {
       TableName: this.config.get<string>('DDB_TABLE'),
       KeyConditionExpression: 'id = :id',
@@ -36,7 +36,12 @@ export class StoringService {
     };
     const allDataQuery =  await this.dynamoDbClient.query(params).promise();
     const dbItem = allDataQuery.Items[0];
-    const decryptedData = this.encryptionService.decryptData(dbItem.data, decryption_key);
-    return {id, value: decryptedData};
+    try {
+      const decryptedData = this.encryptionService.decryptData(dbItem.data, decryption_key);
+      return {id, value: decryptedData};
+    } catch (err) {
+      this.logger.error(err.message);
+      return [];
+    }
   }
 }
