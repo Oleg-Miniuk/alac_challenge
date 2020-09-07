@@ -29,21 +29,21 @@ export class StoringService {
 
   public async getData(data): Promise<StoredData[]> {
     const { decryption_key, id } = data;
-    // const params = {
-    //   TableName: this.config.get<string>('DDB_TABLE'),
-    //   KeyConditionExpression: 'id = :id',
-    //   ExpressionAttributeValues: { ':id': id },
-    // };
-    // const dbResponse = await this.dynamoDbClient.query(params).promise();
-    //
 
-    // TODO replace scan() as too expensive operation. Consider GSI for Dynamo instead
+
+    // TODO Crutch! Discuss and rewrite  wildcard *
+    // 1) replace scan() as too expensive operation. Consider GSI for DynamoDB. Or index +  select * where command like for SQL-DB
+    // 2) remove crutch for wildcard
+    const parsedId = id.replace(/-\*/gi, '');
+
     const params = {
       TableName: this.config.get<string>('DDB_TABLE'),
       ExpressionAttributeValues: { ':id': id },
       FilterExpression: 'contains (id, :id)',
     };
     const dbResponse = await this.dynamoDbClient.scan(params).promise();
+    // end of TODO
+
     try {
       return dbResponse.Items.map(item => ({
         id: item.id,
