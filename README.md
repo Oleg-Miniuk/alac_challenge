@@ -1,7 +1,13 @@
 ## Description
 
-Hello to whoever looks.
+Hello to whoever is reading this.
+
 Here is a completed task with storing-getting the data from EP.
+
+Let me tell that it is a proto-proto-typing implementaion just for checking.
+
+## Technical Stack
+NestJS/TS, Jest, AWS DynamoDB, AWS Elastic Beanstalk  
 
 ## Check
 
@@ -10,31 +16,26 @@ Here is a completed task with storing-getting the data from EP.
 POST 
 http://alacritychallenge2-env.eba-qfn33pmz.us-east-2.elasticbeanstalk.com/storing/store-data
 
-Body:
-id: string
-encryption_key: string
-value: valid JSON type
+Body:\
+**id**: string\
+**encryption_key**: string\
+**value**: valid JSON type
 
 ### Retrieval Endpoint:
 
-POST (is used to prevent sensitive information exposure through query strings in url)
+POST (is used to prevent sensitive information exposure through query strings in url)\
 http://alacritychallenge2-env.eba-qfn33pmz.us-east-2.elasticbeanstalk.com/storing/get-data
 
-Body:
-id: string
-decryption_key: string
+Body:\
+**id**: string\
+**decryption_key**: string
 
 
-## Installation
+## Installation, Running & Deploying the app
 
 ```bash
 $ npm install
-$ npm run start:dev
-```
 
-## Running & deploying the app
-
-```bash
 # development
 $ npm run start:dev
 
@@ -42,6 +43,7 @@ $ npm run start:dev
 
 # deploying
 $ npm run deploy
+```
 
 ## Test
 
