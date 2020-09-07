@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
+import { v4 as uuidv4 } from 'uuid';
 
 describe('e2e tests', () => {
   let app: INestApplication;
@@ -22,11 +23,12 @@ describe('e2e tests', () => {
       .expect('Whatsup');
   });
 
-  const id = 'e2e_id';
-  const key = 'e2e_encr';
+  const id = uuidv4();
+
+  const key = uuidv4();
   const value = 'some text data';
 
-  it('Storing the data', () => {
+  it('storing data', () => {
     return request(app.getHttpServer())
       .post('/storing/store-data')
       .send({id, encryption_key: key, value})
@@ -34,7 +36,7 @@ describe('e2e tests', () => {
       .expect('Data successfully stored');
   });
 
-  it('Getting the data', () => {
+  it('receiving data', () => {
     return request(app.getHttpServer())
       .post('/storing/get-data')
       .send({id, decryption_key: key})
@@ -43,4 +45,6 @@ describe('e2e tests', () => {
         value
       }])
   });
+
+
 });

@@ -38,7 +38,7 @@ export class StoringService {
 
     const params = {
       TableName: this.config.get<string>('DDB_TABLE'),
-      ExpressionAttributeValues: { ':id': id },
+      ExpressionAttributeValues: { ':id': parsedId },
       FilterExpression: 'contains (id, :id)',
     };
     const dbResponse = await this.dynamoDbClient.scan(params).promise();

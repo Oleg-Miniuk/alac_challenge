@@ -2,7 +2,7 @@
 
 Hello to whoever is reading this.
 
-Here is a completed task with storing-getting the data from EP.
+Here is a completed task with storing-receiving the data from EP.
 
 Let me tell that it is a proto-proto-typing implementaion just for checking.
 
