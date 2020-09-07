@@ -4,10 +4,27 @@ Hello to whoever is reading this.
 
 Here is a completed task with storing-receiving the data from EP.
 
-Let me tell that it is a proto-proto-typing implementaion just for checking.
+Let me underline that it is a proto-proto-typing implementaion just for checking.
 
 ## Technical Stack
-NestJS/TS, Jest, AWS DynamoDB, AWS Elastic Beanstalk  
+NestJS/TS, Jest, AWS DynamoDB, AWS Elastic Beanstalk
+
+## QA
+Code quality: eslint
+
+Unit-testing and e2e testing on git hooks.
+
+Of course, the real solution would be to add stages to CI/CD pipeline for unit-testing and e2e testing on each environment.
+
+## Must-have improvements
+
+1) Docker, ECR, ECS/Fargate
+2) CI/CD
+3) Multiple environments (dev ... pre-prod, prod)
+3) Api Gateway, Load Balancer
+4) VPC, public & private subnets
+5) Security policies
+6) Fault tolerance (AWS availability zones, Dynamo replicas etc)
 
 ## Check
 
@@ -57,15 +74,6 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-## Must-have improvements
-
-1) Docker, ECR, ECS/Fargate
-2) CI/CD
-3) Multiple environments (dev ... pre-prod, prod)
-3) Api Gateway, Load Balancer
-4) VPC, public & private subnets
-5) Security policies
-6) Fault tolerance (AWS availability zones, Dynamo replicas etc)
 
 ## Thank you for review
 Oleg
