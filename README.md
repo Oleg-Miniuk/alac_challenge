@@ -57,3 +57,18 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+## Must-have improvements
+
+1) Docker, ECR, ECS/Fargate
+2) CI/CD
+3) Multiple environments (dev ... pre-prod, prod)
+3) Api Gateway, Load Balancer
+4) VPC, public & private subnets
+5) Security policies
+6) Fault tolerance (AWS availability zones, Dynamo replicas etc)
+
+## Thank you for review
+Oleg
+
+oleg.miniuk@gmail.com
+https://www.linkedin.com/in/oleg-miniuk/
